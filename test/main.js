@@ -21,6 +21,11 @@ $(function() {
     logEvent(text);
   });
 
+  socket.on('joined', function (username) {
+    var text = 'You joined as: ' + username;
+    logEvent(text);
+  });
+
   socket.on('message', function (data) {
     var text = 'Message: ' + data;
     logEvent(text);

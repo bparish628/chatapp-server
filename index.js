@@ -5,9 +5,12 @@ var io = require('socket.io')(http);
 
 app.use(express.static(__dirname + '/test'));
 
+io.on('connection', function(socket) {
 
-io.on('connection', function(socket) {  
   socket.on('set username', function(username){
+    socket.username = username;
+
+    socket.emit('joined', username);
     io.emit('new user', username);
     console.log('username: ' + username);
   });
