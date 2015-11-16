@@ -1,54 +1,34 @@
 $(function() {
   // Initialize varibles
-  var $window = $(window);
-  var $usernameInput = $('.usernameInput'); // Input for username
-  var $messages = $('.messages'); // Messages area
-  var $inputMessage = $('.inputMessage'); // Input message input box
-
-  var $loginPage = $('.login.page'); // The login page
-  var $chatPage = $('.chat.page'); // The chatroom page
-
-  // Prompt for setting a username
-  var username;
-  var connected = false;
-  var typing = false;
-  var $currentInput = $usernameInput.focus();
-
   var socket = io();
 
+  function logEvent(text){
+    $('.log').append('<li class="list-group-item">' + text + '</li>');
+    console.log(text);
+  }
 
-  
-  $window.keydown(function (event) {
-    if (!(event.ctrlKey || event.metaKey || event.altKey)) {
-      $currentInput.focus();
-    }
-    if (event.which === 13) {
-      if (username) {
-        sendMessage();
-      } else {
-        setUsername();
-      }
-    }
+  $('.set-username').on('click', function(){
+    socket.emit('set username', $('.username').val());
+  });
+
+  $('.send-message').on('click', function(){
+    socket.emit('message', $('.message').val());
   });
 
   // Socket events
-
-  socket.on('login', function (data) {
-    connected = true;
-    var message = "Welcome to the chat – ";
-    log(message, {
-      prepend: true
-    });
-    addParticipantsMessage(data);
+  socket.on('new user', function (username) {
+    var text = 'New User: ' + username;
+    logEvent(text);
   });
 
   socket.on('message', function (data) {
-    addChatMessage(data);
+    var text = 'Message: ' + data;
+    logEvent(text);
   });
 
   socket.on('user joined', function (data) {
-    log(data.username + ' joined');
-    addParticipantsMessage(data);
+    var text = data.username + ' joined';
+    logEvent(text);
   });
 
 });

@@ -1,34 +1,24 @@
 var express = require('express');
 var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = 80;
-
-server.listen(port, function () {
-  console.log('Server listening at port %d', port);
-});
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 app.use(express.static(__dirname + '/test'));
 
-io.on('connection', function (socket) {
 
-  socket.on('message', function (data) {
-    socket.broadcast.emit('message', {
-      username: socket.username,
-      message: data
-    });
+io.on('connection', function(socket) {  
+  socket.on('set username', function(username){
+    io.emit('new user', username);
+    console.log('username: ' + username);
   });
 
-  socket.on('new user', function (username) {
-    socket.username = username;
-    socket.broadcast.emit('user joined', {
-      username: socket.username
-    });
+  socket.on('message', function(message){
+    io.emit('message', message);
+    console.log('message: ' + message);
   });
 
-  socket.on('disconnect', function () {
-    socket.broadcast.emit('user left', {
-	  username: socket.username
-    });
-  });
+});
+
+http.listen(80, function() {
+  console.log('listening on *:80');
 });
