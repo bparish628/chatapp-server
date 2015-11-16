@@ -1,0 +1,12 @@
+{
+  "name": "chatapp-server",
+  "version": "0.0.1",
+  "description": "An android chat server",
+  "main": "index.js",
+  "author": "Benji Parish",
+  "private": false,
+  "dependencies": {
+    "express": "3.4.8",
+	"socket.io": "1.3.7"
+  }
+}
