@@ -5,19 +5,53 @@ var io = require('socket.io')(http);
 
 app.use(express.static(__dirname + '/test'));
 
+var users = {};
+
 io.on('connection', function(socket) {
 
-  socket.on('set username', function(username){
+  socket.on('join', function(username){
     socket.username = username;
+    users[socket.id] = username;
 
-    socket.emit('joined', username);
-    io.emit('new user', username);
-    console.log('username: ' + username);
+    socket.broadcast.emit('joined', {
+      username:username,
+      users: users
+    });
+    console.log(username + ' has joined');
   });
 
   socket.on('message', function(message){
-    io.emit('message', message);
-    console.log('message: ' + message);
+    io.emit('message', {
+      username: socket.username,
+      message: message
+    });
+    console.log(socket.username + ' : ' + message);
+  });
+
+  socket.on('typing', function (){
+    socket.broadcast.emit('typing', {
+      username: socket.username
+    });
+    console.log(socket.username + 'is typing');
+  });
+
+  socket.on('stop typing', function (){
+    socket.broadcast.emit('stop typing', {
+      username: socket.username
+    });
+    console.log(socket.username + 'stopped typing');
+  });
+
+  socket.on('disconnect', function () {
+    if (users[socket.id]) {
+      delete users[socket.id];
+
+      socket.broadcast.emit('leave', {
+        username: socket.username,
+        users: users
+      });
+      console.log(socket.username + ' has left');
+    }
   });
 
 });
