@@ -8,6 +8,8 @@ server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
 
+app.use(express.static(__dirname + '/test'));
+
 io.on('connection', function (socket) {
 
   socket.on('message', function (data) {
