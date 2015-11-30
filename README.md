@@ -11,4 +11,26 @@ $ node .
 
 And point your browser to `http://localhost`
 
-## Features
+## API
+
+### Requests
+
+`join` - Accepts a `(String)` username. Response: `joined`.
+
+`message` - Accepts a `(String)` message. Response: `message`.
+
+`typing` - Response: `typing`.
+
+`stop typing` - Response: `stop typing`.
+
+### Responses
+
+`joined` -
+
+`message` -
+
+`typing` -
+
+`stop typing` -
+
+`leave` -
