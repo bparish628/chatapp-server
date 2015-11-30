@@ -6,7 +6,7 @@
   "author": "Benji Parish",
   "private": false,
   "scripts": {
-	"start": "node index.js"
+	"start": "npm install && node index.js"
   },
   "dependencies": {
     "express": "3.4.8",
