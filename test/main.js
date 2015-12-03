@@ -10,7 +10,6 @@ $(function() {
 
   $('.set-username').on('click', function(){
     socket.emit('join', $('.username').val());
-    logEvent('Joined as ' + $('.username').val());
   });
 
   $('.send-message').on('click', function(){
@@ -21,6 +20,11 @@ $(function() {
   // Socket events
   socket.on('joined', function (data) {
     var text = data.username + ' has joined';
+    logEvent(text);
+  });
+
+  socket.on('login', function (data) {
+    var text = 'You logged in!';
     logEvent(text);
   });
 

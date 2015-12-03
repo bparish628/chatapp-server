@@ -17,6 +17,11 @@ io.on('connection', function(socket) {
       username:username,
       users: users
     });
+
+    socket.emit('login', {
+      username:username,
+      users: users
+    });
     console.log(username + ' has joined');
   });
 
